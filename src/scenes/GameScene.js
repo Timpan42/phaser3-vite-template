@@ -1,8 +1,30 @@
 import Phaser from 'phaser'
+import ScoreLabel from '../ui/ScoreLabel'
+
 
 const GROUND_KEY = 'ground'
 const DUDE_KEY = 'dude'
+const BULLET = 'bullet'
 
+class Bullet extends Phaser.Physics.Arcade.Sprite{
+	constructor(scene, x, y) {
+		super(scene, x, y, BULLET);
+	}
+}
+
+class BulletGrup extends Phaser.Physics.Arcade.Group{
+	constructor(scene){
+		super(scene.physics.world, scene);
+
+		this.createMultiple({
+			classType: Bullet,
+			frameQuantity: 30,
+			active: false,
+			visible: true,
+			key: BULLET
+		})
+	}
+}
 
 export default class GameScene extends Phaser.Scene
 {
@@ -12,6 +34,12 @@ export default class GameScene extends Phaser.Scene
 
         this.player = undefined
 		this.cursors = undefined
+		this.scoreLabel = undefined
+		this.gameOver = false
+
+		this.bulletGrupe;
+
+
 	}
 
 	preload()
@@ -19,7 +47,7 @@ export default class GameScene extends Phaser.Scene
         this.load.image('sky', 'assets/sky.png')
 		this.load.image(GROUND_KEY, 'assets/platform.png')
 		this.load.image('star', 'assets/star.png')
-		this.load.image('bomb', 'assets/bomb.png')
+		this.load.image(BULLET, 'assets/bomb.png')
 
 		this.load.spritesheet(DUDE_KEY, 
 			'assets/dude.png',
@@ -30,22 +58,29 @@ export default class GameScene extends Phaser.Scene
 
 	create()
 	{
-        this.add.image(400, 300, 'sky')
-    	this.add.image(20, 20, 'star')
-    	this.add.image(50, 20, 'star')
-    	this.add.image(80, 20, 'star')
-    	this.add.image(110, 20, 'star')
-    	this.add.image(140, 20, 'star')
+        this.add.image(400, 300, 'sky')	
 
         const platforms = this.createPlatforms()
         this.player = this.createPlayer()
 
+		this.bulletGrupe = new BulletGrup(this)
+
+		this.scoreLabel = this.createScoreLabel(16, 16, 0)
+
+		
         this.physics.add.collider(this.player, platforms)
+		
 
-		this.cursors = this.input.keyboard.createCursorKeys()        	
+
+
+		this.cursors = this.input.keyboard.createCursorKeys()
+		this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
+		this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
+		this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+		this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
+		
+		
 	}
-
-    
 
     createPlatforms(){
         const platforms = this.physics.add.staticGroup()
@@ -58,6 +93,16 @@ export default class GameScene extends Phaser.Scene
 
         return platforms
     }
+
+	createScoreLabel(x, y, score)
+	{
+		const style = { fontSize: '32px', fill: '#000' }
+		const label = new ScoreLabel(this, x, y, score, style)
+
+		this.add.existing(label)
+
+		return label
+	}
 
     createPlayer(){
         
@@ -87,14 +132,24 @@ export default class GameScene extends Phaser.Scene
 
         return player
     }
+
 	update(){
-		if (this.cursors.left.isDown)
+
+		if(this.gameOver){
+			return
+		}
+
+		
+		//input keys A 
+		if (this.keyA.isDown)
 		{
 			this.player.setVelocityX(-160)
 
 			this.player.anims.play('left', true)
 		}
-		else if (this.cursors.right.isDown)
+		//input keys D
+		else if (
+			this.keyD.isDown)
 		{
 			this.player.setVelocityX(160)
 
@@ -107,7 +162,11 @@ export default class GameScene extends Phaser.Scene
 			this.player.anims.play('turn')
 		}
 
-		if (this.cursors.up.isDown && this.player.body.touching.down)
+		//input keys W och space 
+		if (
+			this.keyW.isDown && this.player.body.touching.down  
+			|| this.cursors.space.isDown && this.player.body.touching.down
+			)
 		{
 			this.player.setVelocityY(-330)
 		}
