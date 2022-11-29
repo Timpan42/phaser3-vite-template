@@ -10,6 +10,53 @@ class Bullet extends Phaser.Physics.Arcade.Sprite{
 	constructor(scene, x, y) {
 		super(scene, x, y, BULLET);
 	}
+
+	fireLeft(x, y){
+		this.body.reset(x, y)
+
+		this.setActive(true)
+		this.setVisible(true)
+
+		this.setVelocityX(-1000)
+	}
+
+	fireRight(x, y){
+		this.body.reset(x, y)
+
+		this.setActive(true)
+		this.setVisible(true)
+
+		this.setVelocityX(+1000)
+	}
+
+
+	fireUp(x, y){
+		this.body.reset(x, y)
+
+		this.setActive(true)
+		this.setVisible(true)
+
+		this.setVelocityY(-1000)
+	}
+	fireUpLeft(x, y){
+		this.body.reset(x, y)
+
+		this.setActive(true)
+		this.setVisible(true)
+
+		this.setVelocityX(-1000)
+		this.setVelocityY(-1000)
+	}
+
+	fireUpRight(x, y){
+		this.body.reset(x, y)
+
+		this.setActive(true)
+		this.setVisible(true)
+
+		this.setVelocityX(+1000)
+		this.setVelocityY(-1000)
+	}
 }
 
 class BulletGrup extends Phaser.Physics.Arcade.Group{
@@ -20,9 +67,44 @@ class BulletGrup extends Phaser.Physics.Arcade.Group{
 			classType: Bullet,
 			frameQuantity: 30,
 			active: false,
-			visible: true,
+			visible: false,
 			key: BULLET
 		})
+	}
+
+	fireGunRight(x, y){
+		const bullet = this.getFirstDead(false)
+		if(bullet){
+			bullet.fireRight(x, y)
+		}
+	}
+	
+	fireGunLeft(x, y){
+		const bullet = this.getFirstDead(false)
+		if(bullet){
+			bullet.fireLeft(x, y)
+		}
+	}
+
+	
+	fireGunUp(x, y){
+		const bullet = this.getFirstDead(false)
+		if(bullet){
+			bullet.fireUp(x, y)
+		}
+	}
+
+	fireGunUpLeft(x, y){
+		const bullet = this.getFirstDead(false)
+		if(bullet){
+			bullet.fireUpLeft(x, y)
+		}
+	}
+	fireGunUpRight(x, y){
+		const bullet = this.getFirstDead(false)
+		if(bullet){
+			bullet.fireUpRight(x, y)
+		}
 	}
 }
 
@@ -60,12 +142,12 @@ export default class GameScene extends Phaser.Scene
 	{
         this.add.image(400, 300, 'sky')	
 
-        const platforms = this.createPlatforms()
-        this.player = this.createPlayer()
+        const platforms = this.addPlatforms()
+        this.player = this.addPlayer()
 
 		this.bulletGrupe = new BulletGrup(this)
 
-		this.scoreLabel = this.createScoreLabel(16, 16, 0)
+		this.scoreLabel = this.addScoreLabel(16, 16, 0)
 
 		
         this.physics.add.collider(this.player, platforms)
@@ -82,7 +164,7 @@ export default class GameScene extends Phaser.Scene
 		
 	}
 
-    createPlatforms(){
+    addPlatforms(){
         const platforms = this.physics.add.staticGroup()
 
 		platforms.create(400, 568, GROUND_KEY).setScale(2).refreshBody()
@@ -94,7 +176,7 @@ export default class GameScene extends Phaser.Scene
         return platforms
     }
 
-	createScoreLabel(x, y, score)
+	addScoreLabel(x, y, score)
 	{
 		const style = { fontSize: '32px', fill: '#000' }
 		const label = new ScoreLabel(this, x, y, score, style)
@@ -104,7 +186,7 @@ export default class GameScene extends Phaser.Scene
 		return label
 	}
 
-    createPlayer(){
+    addPlayer(){
         
         const player = this.physics.add.sprite(100, 450, DUDE_KEY)
 		player.setBounce(0.2)
@@ -133,11 +215,58 @@ export default class GameScene extends Phaser.Scene
         return player
     }
 
+
+	gunLeft(){
+		this.bulletGrupe.fireGunLeft(this.player.x - 20, this.player.y)
+	}
+
+	gunRight(){
+		this.bulletGrupe.fireGunRight(this.player.x + 20, this.player.y)
+	}
+	
+	gunUp(){
+		this.bulletGrupe.fireGunUp(this.player.x, this.player.y - 20)
+	}
+
+	gunUpLeft(){
+		this.bulletGrupe.fireGunUpLeft(this.player.x - 20, this.player.y - 20)
+	}
+
+	gunUpRight(){
+		this.bulletGrupe.fireGunUpRight(this.player.x + 20, this.player.y - 20)
+	}
+
 	update(){
 
 		if(this.gameOver){
 			return
 		}
+
+		if (this.cursors.left.isDown){
+			if (this.cursors.up.isDown && this.cursors.left.isDown){
+				this.gunUpLeft()
+			} else this.gunLeft()
+		}
+		
+		if (this.cursors.right.isDown){
+			if (this.cursors.up.isDown && this.cursors.right.isDown){
+			this.gunUpRight()
+		
+			} else this.gunRight()
+		}
+
+		if (this.cursors.up.isDown){
+			if (this.cursors.up.isDown && this.cursors.left.isDown){
+				this.gunUpLeft()
+			}
+			else if (this.cursors.up.isDown && this.cursors.right.isDown){
+				this.gunUpRight()
+			} else 
+			this.gunUp()
+		}
+
+
+
 
 		
 		//input keys A 
