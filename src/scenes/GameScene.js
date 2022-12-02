@@ -264,11 +264,6 @@ export default class GameScene extends Phaser.Scene
 			} else 
 			this.gunUp()
 		}
-
-
-
-
-		
 		//input keys A 
 		if (this.keyA.isDown)
 		{
