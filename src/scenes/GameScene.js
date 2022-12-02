@@ -3,12 +3,26 @@ import ScoreLabel from '../ui/ScoreLabel'
 
 
 const GROUND_KEY = 'ground'
-const DUDE_KEY = 'dude'
+const RAT_IDEL_KEY = 'rat1_idel'
+const RAT_WALK_KEY = 'rat1_walk'
 const BULLET = 'bullet'
 
 class Bullet extends Phaser.Physics.Arcade.Sprite{
 	constructor(scene, x, y) {
 		super(scene, x, y, BULLET);
+	}
+
+	preUpdate(time, delta){
+		super.preUpdate(time, delta)
+
+		if (this.y <= 0){
+			this.setActive(false)
+			this.setVisible(false)
+		}
+		if (this.x <= 0 || this.x >= 800){
+			this.setActive(false)
+			this.setVisible(false)
+		}
 	}
 
 	fireLeft(x, y){
@@ -65,7 +79,7 @@ class BulletGrup extends Phaser.Physics.Arcade.Group{
 
 		this.createMultiple({
 			classType: Bullet,
-			frameQuantity: 30,
+			frameQuantity: 1,
 			active: false,
 			visible: false,
 			key: BULLET
@@ -131,12 +145,14 @@ export default class GameScene extends Phaser.Scene
 		this.load.image('star', 'assets/star.png')
 		this.load.image(BULLET, 'assets/bomb.png')
 
-		this.load.spritesheet(DUDE_KEY, 
-			'assets/dude.png',
-			{ frameWidth: 32, frameHeight: 48 }
+		this.load.spritesheet(RAT_IDEL_KEY, 
+			'assets/rat/idle.png',
+			{ frameWidth: 32 * 2, frameHeight: 48 * 2 })
 
-	)
-}
+		this.load.spritesheet(RAT_WALK_KEY, 
+			'assets/rat/walk.png',
+			{ frameWidth: 32 * 2, frameHeight: 48 * 2 })
+	}
 
 	create()
 	{
@@ -188,26 +204,26 @@ export default class GameScene extends Phaser.Scene
 
     addPlayer(){
         
-        const player = this.physics.add.sprite(100, 450, DUDE_KEY)
+        const player = this.physics.add.sprite(100, 450, RAT_IDEL_KEY)
 		player.setBounce(0.2)
 		player.setCollideWorldBounds(true)
 
 		this.anims.create({
 			key: 'left',
-			frames: this.anims.generateFrameNumbers(DUDE_KEY, { start: 0, end: 3 }),
+			frames: this.anims.generateFrameNumbers(RAT_WALK_KEY, { start: 0, end: 3 }),
 			frameRate: 10,
 			repeat: -1
 		})
 		
 		this.anims.create({
 			key: 'turn',
-			frames: [ { key: DUDE_KEY, frame: 4 } ],
+			frames: [ { key: RAT_IDEL_KEY, frame: 3 } ],
 			frameRate: 20
 		})
 		
 		this.anims.create({
 			key: 'right',
-			frames: this.anims.generateFrameNumbers(DUDE_KEY, { start: 5, end: 8 }),
+			frames: this.anims.generateFrameNumbers(RAT_WALK_KEY, { start: 4, end: 7 }),
 			frameRate: 10,
 			repeat: -1
 		})
@@ -255,7 +271,8 @@ export default class GameScene extends Phaser.Scene
 			} else this.gunRight()
 		}
 
-		if (this.cursors.up.isDown){
+		if (this.cursors.up.isDown)
+		{
 			if (this.cursors.up.isDown && this.cursors.left.isDown){
 				this.gunUpLeft()
 			}
@@ -270,7 +287,7 @@ export default class GameScene extends Phaser.Scene
 			this.player.setVelocityX(-160)
 
 			this.player.anims.play('left', true)
-		}
+		} 
 		//input keys D
 		else if (
 			this.keyD.isDown)
@@ -278,8 +295,7 @@ export default class GameScene extends Phaser.Scene
 			this.player.setVelocityX(160)
 
 			this.player.anims.play('right', true)
-		}
-		else
+		} else
 		{
 			this.player.setVelocityX(0)
 
