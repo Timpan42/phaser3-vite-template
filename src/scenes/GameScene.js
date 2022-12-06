@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
 import ScoreLabel from '../ui/ScoreLabel'
-import GunMaker from '../mechanics/GunMaker'
 
 const GROUND_KEY = 'ground'
 const RAT_IDEL_KEY = 'rat1_idel'
