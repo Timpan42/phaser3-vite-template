@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import ScoreLabel from '../ui/ScoreLabel'
-
+import GunMaker from '../mechanics/GunMaker'
 
 const GROUND_KEY = 'ground'
 const RAT_IDEL_KEY = 'rat1_idel'
@@ -140,24 +140,24 @@ export default class GameScene extends Phaser.Scene
 
 	preload()
 	{
-        this.load.image('sky', 'assets/sky.png')
+        this.load.image('sky', 'assets/legitjag.png')
 		this.load.image(GROUND_KEY, 'assets/platform.png')
 		this.load.image('star', 'assets/star.png')
 		this.load.image(BULLET, 'assets/bomb.png')
 
 		this.load.spritesheet(RAT_IDEL_KEY, 
 			'assets/rat/idle.png',
-			{ frameWidth: 32 * 2, frameHeight: 48 * 2 })
+			{ frameWidth: 32, frameHeight: 11 })
 
 		this.load.spritesheet(RAT_WALK_KEY, 
 			'assets/rat/walk.png',
-			{ frameWidth: 32 * 2, frameHeight: 48 * 2 })
+			{ frameWidth: 32, frameHeight: 11 })
 	}
 
 	create()
 	{
-        this.add.image(400, 300, 'sky')	
-
+        this.add.image(400, 300, 'sky').setScale(4,3)	
+		
         const platforms = this.addPlatforms()
         this.player = this.addPlayer()
 
@@ -204,8 +204,8 @@ export default class GameScene extends Phaser.Scene
 
     addPlayer(){
         
-        const player = this.physics.add.sprite(100, 450, RAT_IDEL_KEY)
-		player.setBounce(0.2)
+        const player = this.physics.add.sprite(100, 450, RAT_IDEL_KEY).setScale(2)
+		player.setBounce(0)
 		player.setCollideWorldBounds(true)
 
 		this.anims.create({
@@ -286,7 +286,7 @@ export default class GameScene extends Phaser.Scene
 		{
 			this.player.setVelocityX(-160)
 
-			this.player.anims.play('left', true)
+			this.player.anims.play('right', true)
 		} 
 		//input keys D
 		else if (
@@ -294,7 +294,7 @@ export default class GameScene extends Phaser.Scene
 		{
 			this.player.setVelocityX(160)
 
-			this.player.anims.play('right', true)
+			this.player.anims.play('left', true)
 		} else
 		{
 			this.player.setVelocityX(0)
