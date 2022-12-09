@@ -5,6 +5,7 @@ const GROUND_KEY = 'ground'
 const RAT_IDEL_KEY = 'rat1_idel'
 const RAT_WALK_KEY = 'rat1_walk'
 const BULLET = 'bullet'
+const CAT = 'Cat'
 
 class Bullet extends Phaser.Physics.Arcade.Sprite{
 	constructor(scene, x, y) {
@@ -13,7 +14,8 @@ class Bullet extends Phaser.Physics.Arcade.Sprite{
 
 	preUpdate(time, delta){
 		super.preUpdate(time, delta)
-
+		
+		//reseta pistolens skot 
 		if (this.y <= 0){
 			this.setActive(false)
 			this.setVisible(false)
@@ -33,6 +35,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite{
 		this.setVelocityX(-1000)
 	}
 
+	// hur skotet ska fara vid input 
 	fireRight(x, y){
 		this.body.reset(x, y)
 
@@ -72,6 +75,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite{
 	}
 }
 
+// skotens skapas
 class BulletGrup extends Phaser.Physics.Arcade.Group{
 	constructor(scene){
 		super(scene.physics.world, scene);
@@ -121,6 +125,7 @@ class BulletGrup extends Phaser.Physics.Arcade.Group{
 	}
 }
 
+// spelet
 export default class GameScene extends Phaser.Scene
 {
 	constructor()
@@ -136,13 +141,15 @@ export default class GameScene extends Phaser.Scene
 
 
 	}
-
+	// ladar in först t.ex sprits
 	preload()
 	{
         this.load.image('sky', 'assets/legitjag.png')
 		this.load.image(GROUND_KEY, 'assets/platform.png')
 		this.load.image('star', 'assets/star.png')
 		this.load.image(BULLET, 'assets/bomb.png')
+		this.load.spritesheet(CAT,'assets/Cat/Idle.png',{
+			frameWidth: 48, frameHeight:48})
 
 		this.load.spritesheet(RAT_IDEL_KEY, 
 			'assets/rat/idle.png',
@@ -152,13 +159,20 @@ export default class GameScene extends Phaser.Scene
 			'assets/rat/walk.png',
 			{ frameWidth: 32, frameHeight: 11 })
 	}
-
+	
+	// ladar spel
 	create()
 	{
         this.add.image(400, 300, 'sky').setScale(4,3)	
 		
         const platforms = this.addPlatforms()
         this.player = this.addPlayer()
+		this.player.setScale(2)
+
+		this.cat = this.addCat()
+		this.cat.setScale(1.7)
+		this.cat.flipX = true
+
 
 		this.bulletGrupe = new BulletGrup(this)
 
@@ -178,7 +192,8 @@ export default class GameScene extends Phaser.Scene
 		
 		
 	}
-
+	
+	// skapar platforms function
     addPlatforms(){
         const platforms = this.physics.add.staticGroup()
 
@@ -191,6 +206,7 @@ export default class GameScene extends Phaser.Scene
         return platforms
     }
 
+	// läger en scorelabel function
 	addScoreLabel(x, y, score)
 	{
 		const style = { fontSize: '32px', fill: '#000' }
@@ -201,9 +217,17 @@ export default class GameScene extends Phaser.Scene
 		return label
 	}
 
+	addCat(){
+		const cat = this.physics.add.sprite(100, 450, CAT)
+		cat.setBounce(0)
+		cat.setCollideWorldBounds(true)
+
+		return cat
+	}
+	// spelaren function
     addPlayer(){
         
-        const player = this.physics.add.sprite(100, 450, RAT_IDEL_KEY).setScale(2)
+        const player = this.physics.add.sprite(100, 450, RAT_IDEL_KEY)
 		player.setBounce(0)
 		player.setCollideWorldBounds(true)
 
@@ -230,7 +254,7 @@ export default class GameScene extends Phaser.Scene
         return player
     }
 
-
+	// pistolens functions
 	gunLeft(){
 		this.bulletGrupe.fireGunLeft(this.player.x - 20, this.player.y)
 	}
@@ -257,6 +281,7 @@ export default class GameScene extends Phaser.Scene
 			return
 		}
 
+		// logik för pistolens inputs
 		if (this.cursors.left.isDown){
 			if (this.cursors.up.isDown && this.cursors.left.isDown){
 				this.gunUpLeft()
