@@ -163,34 +163,42 @@ export default class GameScene extends Phaser.Scene
 	// ladar spel
 	create()
 	{
-        this.add.image(400, 300, 'sky').setScale(4,3)	
+		// cameras physics
+        this.cameras.main.setBounds(0, 50, 1920 * 2, 0);
+        this.physics.world.setBounds(0, 0, 1920 * 2, 1000);
+
+		//spana backgrund
+        this.img = this.add.image(400, 300, 'sky').setScale(0)
 		
+		//spana mark
         const platforms = this.addPlatforms()
-        this.player = this.addPlayer()
+        
+		//spana player och NPC
+		this.player = this.addPlayer()
 		this.player.setScale(2)
 
 		this.cat = this.addCat()
 		this.cat.setScale(1.7)
-		this.cat.flipX = true
 
-
+		// pistol 
 		this.bulletGrupe = new BulletGrup(this)
 
+		// score 
 		this.scoreLabel = this.addScoreLabel(16, 16, 0)
 
-		
+		//colider med mark
         this.physics.add.collider(this.player, platforms)
-		
+        this.physics.add.collider(this.cat, platforms)
 
-
-
+		// inportera inputs
 		this.cursors = this.input.keyboard.createCursorKeys()
 		this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
 		this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
 		this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
 		this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
 		
-		
+		//camera ska följa splerare 
+		this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
 	}
 	
 	// skapar platforms function
@@ -217,10 +225,8 @@ export default class GameScene extends Phaser.Scene
 		return label
 	}
 
-	addCat(){
-		const cat = this.physics.add.sprite(100, 450, CAT)
-		cat.setBounce(0)
-		cat.setCollideWorldBounds(true)
+	addCat(){ 
+		const cat = this.physics.add.sprite(100, 100, CAT)		
 
 		return cat
 	}
@@ -308,7 +314,7 @@ export default class GameScene extends Phaser.Scene
 		//input keys A 
 		if (this.keyA.isDown)
 		{
-			this.player.setVelocityX(-160)
+			this.player.setVelocityX(-250)
 
 			this.player.anims.play('right', true)
 		} 
@@ -316,7 +322,7 @@ export default class GameScene extends Phaser.Scene
 		else if (
 			this.keyD.isDown)
 		{
-			this.player.setVelocityX(160)
+			this.player.setVelocityX(250)
 
 			this.player.anims.play('left', true)
 		} else
@@ -332,7 +338,15 @@ export default class GameScene extends Phaser.Scene
 			|| this.cursors.space.isDown && this.player.body.touching.down
 			)
 		{
-			this.player.setVelocityY(-330)
+			this.player.setVelocityY(-350)
 		}
+
+		// lek område
+		this.cat.angle -= 1 
+
+		this.img.scaleX +=0.001
+		this.img.scaleY +=0.001
+
+
 	}
 }
