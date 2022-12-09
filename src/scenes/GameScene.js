@@ -287,6 +287,10 @@ export default class GameScene extends Phaser.Scene
 			return
 		}
 
+		if (this.cat.x <= 0){
+			
+		}
+
 		// logik för pistolens inputs
 		if (this.cursors.left.isDown){
 			if (this.cursors.up.isDown && this.cursors.left.isDown){
