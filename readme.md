@@ -107,6 +107,11 @@ You can change the dev server's port number by modifying the `vite.config.js` fi
 
 Change 8000 to whatever you want.
 
+## Document och Netlify länk
+[Drive länk](https://docs.google.com/document/d/1jcyMRt7bghX2tVpmxRWiHFA72AjN26VQzBJmrcPOXCg/edit?usp=sharing)
+[Netlify länk](https://delightful-elf-e17bf0.netlify.app/)
+
+
 ## License
 
 [MIT License](https://github.com/ourcade/phaser3-vite-template/blob/master/LICENSE)
