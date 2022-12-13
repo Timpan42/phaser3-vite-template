@@ -41,8 +41,12 @@ Kunde inte hitta en bra guide till hur man gör enemies, så mycket av dagen var
 
 50. Tis
 ### Ska göra idag:
+Hitta hur man gör enemies på ett bra sätt och utöka kartan. Måste fixa så pistolskott kommer tillbaka på en viss tid istället för storlekar   
 
 ### Har gjort:
+Gjorde en map som kommer att användas för spelet. Bestämt ungefär hur det ska spelas.
+Behöver fixa ett sätt så kameran rör sig uppåt och om man ramla så blir det game over. Skulle behöva fixa enemies som man kan ta ner med pistolen eller så ta man bort pistolen och man få bara undvika dem. Ett sätt att vinna spelet skulle vara bra   
+
 
 50. Fre
 ### Ska göra idag:

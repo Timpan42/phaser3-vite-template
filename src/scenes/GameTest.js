@@ -240,20 +240,6 @@ export default class GameScene extends Phaser.Scene
 
         platforms.create(180, 150, GROUND_KEY)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return platforms
     }
 
@@ -330,10 +316,6 @@ export default class GameScene extends Phaser.Scene
 			return
 		}
 
-		if (this.cat.x <= 0){
-			
-		}
-
 		// logik för pistolens inputs
 		if (this.cursors.left.isDown){
 			if (this.cursors.up.isDown && this.cursors.left.isDown){
@@ -390,10 +372,9 @@ export default class GameScene extends Phaser.Scene
 
 		// lek område
 		this.cat.angle -= 1 
-
 		this.img.scaleX +=0.001
 		this.img.scaleY +=0.001
-
+        this.cameras.main.scrollY -= 1;
 
 	}
 }
