@@ -17,7 +17,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite{
 		super.preUpdate(time, delta)
 		
 		//reseta pistolens skot 
-		if (this.y <= 0){
+		if (this.y <= 0 || this.y >= 5000){
 			this.setActive(false)
 			this.setVisible(false)
 		}
@@ -165,8 +165,8 @@ export default class GameScene extends Phaser.Scene
 	create()
 	{
 		// cameras physics
-        this.cameras.main.setBounds(0, 50, 1920 * 2, 0);
-        this.physics.world.setBounds(0, 0, 1920 * 2, 1000);
+        this.cameras.main.setBounds(0, 20, 800, 5000);
+        this.physics.world.setBounds(0, 0, 800, 5000);
 
 		//spana backgrund
         this.img = this.add.image(400, 300, 'sky').setScale(0)
@@ -198,19 +198,52 @@ export default class GameScene extends Phaser.Scene
 		this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
 		this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
 		
+		// kamra start position
+		this.cameras.main.centerOn(0,5000)
+
+		// game over text
+
 		//camera ska följa splerare 
-		this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
+		//this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
 	}
 	
 	// skapar platforms function
     addPlatforms(){
         const platforms = this.physics.add.staticGroup()
+		
+		platforms.create(400, 5000, GROUND_KEY).setScale(2).refreshBody()
+		platforms.create(700, 4800, GROUND_KEY)
+		platforms.create(40, 4610, GROUND_KEY)
+		platforms.create(60, 4450, GROUND_KEY)
+		platforms.create(90, 4250, GROUND_KEY)
+		platforms.create(150, 4050, GROUND_KEY)
+		platforms.create(500, 3850, GROUND_KEY)
+		platforms.create(700, 3650, GROUND_KEY)
+		platforms.create(90, 3450, GROUND_KEY)
+		platforms.create(90, 3250, GROUND_KEY)
+		platforms.create(500, 3050, GROUND_KEY)
+		platforms.create(-130, 2890, GROUND_KEY)
+        platforms.create(600, 2750, GROUND_KEY)
+        platforms.create(900, 2550, GROUND_KEY)
+        platforms.create(950, 2350, GROUND_KEY)
+        platforms.create(970, 2150, GROUND_KEY)
+        platforms.create(30, 2220, GROUND_KEY)
 
-		platforms.create(400, 568, GROUND_KEY).setScale(2).refreshBody()
-	
-		platforms.create(600, 400, GROUND_KEY)
-		platforms.create(50, 250, GROUND_KEY)
-		platforms.create(750, 220, GROUND_KEY)
+        platforms.create(430, 2050, GROUND_KEY).setScale(0.25,1).refreshBody()
+        platforms.create(230, 1850, GROUND_KEY).setScale(0.25,1).refreshBody()
+        platforms.create(430, 1650, GROUND_KEY).setScale(0.25,1).refreshBody()
+        platforms.create(130, 1630, GROUND_KEY).setScale(0.25,1).refreshBody()
+        platforms.create(30, 1430, GROUND_KEY).setScale(0.25,1).refreshBody()
+        platforms.create(530, 1260, GROUND_KEY).setScale(0.25,1).refreshBody()
+        platforms.create(700, 1060, GROUND_KEY).setScale(0.25,1).refreshBody()
+        platforms.create(80, 960, GROUND_KEY).setScale(0.25,1).refreshBody()
+
+        platforms.create(150, 760, GROUND_KEY).setScale(0.03,1).refreshBody()
+        platforms.create(550, 580, GROUND_KEY).setScale(0.03,1).refreshBody()
+        platforms.create(250, 380, GROUND_KEY).setScale(0.02,1).refreshBody()
+        platforms.create(650, 200, GROUND_KEY).setScale(0.01,1).refreshBody()
+
+        platforms.create(180, 150, GROUND_KEY)
 
         return platforms
     }
@@ -227,16 +260,17 @@ export default class GameScene extends Phaser.Scene
 	}
 
 	addCat(){ 
-		const cat = this.physics.add.sprite(100, 100, CAT)		
+		const cat = this.physics.add.sprite(100, 2300, CAT)		
 
 		return cat
 	}
 	// spelaren function
     addPlayer(){
         
-        const player = this.physics.add.sprite(100, 450, RAT_IDEL_KEY)
+        const player = this.physics.add.sprite(100, 4900, RAT_IDEL_KEY)
 		player.setBounce(0)
 		player.setCollideWorldBounds(true)
+		
 
 		this.anims.create({
 			key: 'left',
@@ -284,12 +318,15 @@ export default class GameScene extends Phaser.Scene
 
 	update(){
 
-		if(this.gameOver){
-			return
-		}
+		// OM spelaren landar under kamran så är det gameOver 
+		if (this.player.y > this.cameras.main.midPoint.y + 300 ){
+			this.gameOver = true
+		} 
 
-		if (this.cat.x <= 0){
-			
+		// det blir två game overs, vet inte varför 
+		if(this.gameOver){
+			this.add.text(300, this.cameras.main.midPoint.y, 'Game Over', { fontSize: '32px'})
+			return
 		}
 
 		// logik för pistolens inputs
@@ -347,11 +384,11 @@ export default class GameScene extends Phaser.Scene
 		}
 
 		// lek område
-		this.cat.angle -= 1 
-
+		this.cat.angle -= 10
 		this.img.scaleX +=0.001
 		this.img.scaleY +=0.001
-
-
+    	this.cameras.main.scrollY -= 0.5
+		//console.log(this.player.y);
+		//console.log(this.cameras.main.midPoint.y)
 	}
 }

@@ -198,8 +198,12 @@ export default class GameScene extends Phaser.Scene
 		this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
 		this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
 		
-		//camera ska följa splerare 
+		// kamra start position
 		this.cameras.main.centerOn(0,5000)
+
+		// game over text
+
+		//camera ska följa splerare 
 		//this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
 	}
 	
@@ -266,6 +270,7 @@ export default class GameScene extends Phaser.Scene
         const player = this.physics.add.sprite(100, 4900, RAT_IDEL_KEY)
 		player.setBounce(0)
 		player.setCollideWorldBounds(true)
+		
 
 		this.anims.create({
 			key: 'left',
@@ -314,11 +319,13 @@ export default class GameScene extends Phaser.Scene
 	update(){
 
 		// OM spelaren landar under kamran så är det gameOver 
-		if (this.player.y === this.cameras.main.y - 800){
+		if (this.player.y > this.cameras.main.midPoint.y + 300 ){
 			this.gameOver = true
-		}
+		} 
 
+		// det blir två game overs, vet inte varför 
 		if(this.gameOver){
+			this.add.text(300, this.cameras.main.midPoint.y, 'Game Over', { fontSize: '32px'})
 			return
 		}
 
@@ -381,6 +388,7 @@ export default class GameScene extends Phaser.Scene
 		this.img.scaleX +=0.001
 		this.img.scaleY +=0.001
     	this.cameras.main.scrollY -= 0.5
-		this.cameras.main.y 
+		//console.log(this.player.y);
+		//console.log(this.cameras.main.midPoint.y)
 	}
 }
