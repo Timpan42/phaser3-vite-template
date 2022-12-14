@@ -17,7 +17,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite{
 		super.preUpdate(time, delta)
 		
 		//reseta pistolens skot 
-		if (this.y <= 0){
+		if (this.y <= 0 || this.y >= 5000){
 			this.setActive(false)
 			this.setVisible(false)
 		}
