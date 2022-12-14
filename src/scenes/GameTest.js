@@ -313,6 +313,10 @@ export default class GameScene extends Phaser.Scene
 
 	update(){
 
+		/*if (this.player.y == this.cameras.y){
+			this.gameOver = true
+		}*/
+
 		if(this.gameOver){
 			return
 		}
@@ -372,10 +376,10 @@ export default class GameScene extends Phaser.Scene
 		}
 
 		// lek område
-		this.cat.angle -= 1 
+		this.cat.angle -= 10
 		this.img.scaleX +=0.001
 		this.img.scaleY +=0.001
     	this.cameras.main.scrollY -= 0.5
-
+		this.cameras.main.y 
 	}
 }
