@@ -313,9 +313,10 @@ export default class GameScene extends Phaser.Scene
 
 	update(){
 
-		/*if (this.player.y == this.cameras.y){
+		// OM spelaren landar under kamran så är det gameOver 
+		if (this.player.y === this.cameras.main.y - 800){
 			this.gameOver = true
-		}*/
+		}
 
 		if(this.gameOver){
 			return
