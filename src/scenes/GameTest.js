@@ -199,7 +199,8 @@ export default class GameScene extends Phaser.Scene
 		this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
 		
 		//camera ska följa splerare 
-		this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
+		this.cameras.main.centerOn(0,5000)
+		//this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
 	}
 	
 	// skapar platforms function
@@ -374,7 +375,7 @@ export default class GameScene extends Phaser.Scene
 		this.cat.angle -= 1 
 		this.img.scaleX +=0.001
 		this.img.scaleY +=0.001
-        this.cameras.main.scrollY -= 1;
+    	this.cameras.main.scrollY -= 0.5
 
 	}
 }
