@@ -6,7 +6,7 @@ const RAT_IDEL_KEY = 'rat1_idel'
 const RAT_WALK_KEY = 'rat1_walk'
 const BULLET = 'bullet'
 const CAT = 'Cat'
-
+const BOMB = 'bomb'
 
 class Bullet extends Phaser.Physics.Arcade.Sprite{
 	constructor(scene, x, y) {
@@ -137,6 +137,7 @@ export default class GameScene extends Phaser.Scene
 		this.cursors = undefined
 		this.scoreLabel = undefined
 		this.gameOver = false
+		this.gameWin = false
 
 		this.bulletGrupe;
 
@@ -147,7 +148,7 @@ export default class GameScene extends Phaser.Scene
 	{
         this.load.image('sky', 'assets/legitjag.png')
 		this.load.image(GROUND_KEY, 'assets/platform.png')
-		this.load.image('star', 'assets/star.png')
+		this.load.image(BOMB, 'assets/star.png')
 		this.load.image(BULLET, 'assets/bomb.png')
 		this.load.spritesheet(CAT,'assets/Cat/Idle.png',{
 			frameWidth: 48, frameHeight:48})
@@ -176,20 +177,19 @@ export default class GameScene extends Phaser.Scene
         
 		//spana player och NPC
 		this.player = this.addPlayer()
-		this.player.setScale(2)
+		this.player.setScale(2).refreshBody()
 
 		this.cat = this.addCat()
 		this.cat.setScale(1.7)
+
+		// skapar bomb 
+		this.bomb = this.addBomb()
 
 		// pistol 
 		this.bulletGrupe = new BulletGrup(this)
 
 		// score 
 		this.scoreLabel = this.addScoreLabel(16, 16, 0)
-
-		//colider med mark
-        this.physics.add.collider(this.player, platforms)
-        this.physics.add.collider(this.cat, platforms)
 
 		// inportera inputs
 		this.cursors = this.input.keyboard.createCursorKeys()
@@ -204,9 +204,21 @@ export default class GameScene extends Phaser.Scene
 		// game over text
 
 		//camera ska följa splerare 
-		//this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
+		this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
+
+		//colider med mark
+        this.physics.add.collider(this.player, platforms)
+        this.physics.add.collider(this.cat, platforms)
+        this.physics.add.collider(this.bomb, platforms)
+
+		this.physics.add.overlap(this.player, this.bomb, this.collectBomb, null, this)
+
+
 	}
-	
+	collectBomb(player, bomb){
+		this.bomb.disableBody(true, true)
+		this.gameWin = true
+	}
 	// skapar platforms function
     addPlatforms(){
         const platforms = this.physics.add.staticGroup()
@@ -259,6 +271,12 @@ export default class GameScene extends Phaser.Scene
 		return label
 	}
 
+	addBomb(){
+		const bomb = this.physics.add.sprite(50, 100, BOMB).refreshBody()
+
+		return bomb
+	}
+
 	addCat(){ 
 		const cat = this.physics.add.sprite(100, 2300, CAT)		
 
@@ -267,7 +285,7 @@ export default class GameScene extends Phaser.Scene
 	// spelaren function
     addPlayer(){
         
-        const player = this.physics.add.sprite(100, 4900, RAT_IDEL_KEY)
+        const player = this.physics.add.sprite(100, 100, RAT_IDEL_KEY)
 		player.setBounce(0)
 		player.setCollideWorldBounds(true)
 		
@@ -317,7 +335,6 @@ export default class GameScene extends Phaser.Scene
 	}
 
 	update(){
-
 		// OM spelaren landar under kamran så är det gameOver 
 		if (this.player.y > this.cameras.main.midPoint.y + 300 ){
 			this.gameOver = true
@@ -327,6 +344,11 @@ export default class GameScene extends Phaser.Scene
 		if(this.gameOver){
 			this.add.text(300, this.cameras.main.midPoint.y, 'Game Over', { fontSize: '32px'})
 			return
+		}
+
+		if(this.gameWin){
+			this.add.text(300, this.cameras.main.midPoint.y, 'Game Win', { fontSize: '32px'})
+			this.scene.pause()
 		}
 
 		// logik för pistolens inputs
@@ -387,7 +409,7 @@ export default class GameScene extends Phaser.Scene
 		this.cat.angle -= 10
 		this.img.scaleX +=0.001
 		this.img.scaleY +=0.001
-    	this.cameras.main.scrollY -= 1
+    	//this.cameras.main.scrollY -= 1
 		//console.log(this.player.y);
 		//console.log(this.cameras.main.midPoint.y)
 	}
