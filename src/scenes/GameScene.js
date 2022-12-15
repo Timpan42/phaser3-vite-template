@@ -227,7 +227,7 @@ export default class GameScene extends Phaser.Scene
         platforms.create(900, 2550, GROUND_KEY)
         platforms.create(950, 2350, GROUND_KEY)
         platforms.create(970, 2150, GROUND_KEY)
-        platforms.create(30, 2220, GROUND_KEY)
+        platforms.create(20, 2220, GROUND_KEY)
 
         platforms.create(430, 2050, GROUND_KEY).setScale(0.25,1).refreshBody()
         platforms.create(230, 1850, GROUND_KEY).setScale(0.25,1).refreshBody()
@@ -387,7 +387,7 @@ export default class GameScene extends Phaser.Scene
 		this.cat.angle -= 10
 		this.img.scaleX +=0.001
 		this.img.scaleY +=0.001
-    	this.cameras.main.scrollY -= 0.5
+    	this.cameras.main.scrollY -= 1
 		//console.log(this.player.y);
 		//console.log(this.cameras.main.midPoint.y)
 	}
