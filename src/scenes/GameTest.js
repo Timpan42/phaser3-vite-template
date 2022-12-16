@@ -18,9 +18,6 @@ export default class GameScene extends Phaser.Scene
 		this.scoreLabel = undefined
 		this.gameOver = false
 		this.gameWin = false
-
-
-
 	}
 	// ladar in först t.ex sprits
 	preload()
@@ -193,7 +190,8 @@ export default class GameScene extends Phaser.Scene
 		}
 
 		//input keys A 
-		if (this.keyA.isDown)
+		if (this.keyA.isDown 
+			||this.cursors.left.isDown)
 		{
 			this.player.setVelocityX(-250)
 
@@ -201,7 +199,8 @@ export default class GameScene extends Phaser.Scene
 		} 
 		//input keys D
 		else if (
-			this.keyD.isDown)
+			this.keyD.isDown 
+			|| this.cursors.right.isDown)
 		{
 			this.player.setVelocityX(250)
 
@@ -217,6 +216,7 @@ export default class GameScene extends Phaser.Scene
 		if (
 			this.keyW.isDown && this.player.body.touching.down  
 			|| this.cursors.space.isDown && this.player.body.touching.down
+			|| this.cursors.up.isDown && this.player.body.touching.down
 			)
 		{
 			this.player.setVelocityY(-350)
