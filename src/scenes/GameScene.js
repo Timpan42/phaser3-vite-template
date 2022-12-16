@@ -204,7 +204,7 @@ export default class GameScene extends Phaser.Scene
 		// game over text
 
 		//camera ska följa splerare 
-		this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
+		//this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
 
 		//colider med mark
         this.physics.add.collider(this.player, platforms)
@@ -285,7 +285,7 @@ export default class GameScene extends Phaser.Scene
 	// spelaren function
     addPlayer(){
         
-        const player = this.physics.add.sprite(100, 5000, RAT_IDEL_KEY)
+        const player = this.physics.add.sprite(100, 4900, RAT_IDEL_KEY)
 		player.setBounce(0)
 		player.setCollideWorldBounds(true)
 		
