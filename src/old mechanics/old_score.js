@@ -27,3 +27,20 @@ export default class ScoreLabel extends Phaser.GameObjects.Text
 		this.setText(formatScore(this.score))
 	}
 }
+
+/* 
+	// läger en scorelabel function
+	addScoreLabel(x, y, score)
+	{
+		const style = { fontSize: '32px', fill: '#000' }
+		const label = new ScoreLabel(this, x, y, score, style)
+
+		this.add.existing(label)
+
+		return label
+	}
+
+    // score 
+		this.scoreLabel = this.addScoreLabel(16, 16, 0)
+
+*/
