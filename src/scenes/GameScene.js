@@ -155,7 +155,7 @@ export default class GameScene extends Phaser.Scene
 
 		this.load.spritesheet(RAT_IDEL_KEY, 
 			'assets/rat/idle.png',
-			{ frameWidth: 32, frameHeight: 11 })
+			{ frameWidth: 31.5, frameHeight: 11 })
 
 		this.load.spritesheet(RAT_WALK_KEY, 
 			'assets/rat/walk.png',
@@ -409,7 +409,14 @@ export default class GameScene extends Phaser.Scene
 		this.cat.angle -= 10
 		this.img.scaleX +=0.001
 		this.img.scaleY +=0.001
+
+		if (this.player.y >= 4500){
     	this.cameras.main.scrollY -= 1
+		} else if(this.player.y <= 4500 && this.player.y >= 3500) {
+			this.cameras.main.scrollY -= 1.5
+		} else if(this.player.y <= 3500) {
+			this.cameras.main.scrollY -= 1.75
+		}
 		//console.log(this.player.y);
 		//console.log(this.cameras.main.midPoint.y)
 	}
