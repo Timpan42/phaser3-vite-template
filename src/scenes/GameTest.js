@@ -5,6 +5,7 @@ const RAT_IDEL_KEY = 'rat1_idel'
 const RAT_WALK_KEY = 'rat1_walk'
 const CAT = 'Cat'
 const BOMB = 'bomb'
+const ROAD = 'road'
 
 // spelet
 export default class GameScene extends Phaser.Scene
@@ -23,6 +24,9 @@ export default class GameScene extends Phaser.Scene
 	preload()
 	{
         this.load.image('sky', 'assets/legitjag.png')
+        this.load.image('sky1', 'assets/legitjag.png')
+        this.load.image('city', 'assets/war2_back.png')
+        this.load.image(ROAD, 'assets/small_road.png')
 		this.load.image(GROUND_KEY, 'assets/platform.png')
 		this.load.image(BOMB, 'assets/star.png')
 		this.load.spritesheet(CAT,'assets/Cat/Idle.png',{
@@ -45,7 +49,13 @@ export default class GameScene extends Phaser.Scene
         this.physics.world.setBounds(0, 0, 800, 5000);
 
 		//spana backgrund
-        this.img = this.add.image(400, 300, 'sky').setScale(0)
+        this.img = this.add.image(400, 300, 'sky')
+		this.graphics = this.add.graphics()
+		
+		this.graphics.fillGradientStyle(0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 1)
+
+		// skapa city 
+		this.img = this.add.image(400, 4750, 'city')
 		
 		//spana mark
         const platforms = this.addPlatforms()
@@ -73,7 +83,7 @@ export default class GameScene extends Phaser.Scene
 		// game over text
 
 		//camera ska följa splerare 
-		//this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
+		this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
 
 		//colider med mark
         this.physics.add.collider(this.player, platforms)
@@ -93,7 +103,7 @@ export default class GameScene extends Phaser.Scene
     addPlatforms(){
         const platforms = this.physics.add.staticGroup()
 		
-		platforms.create(400, 5000, GROUND_KEY).setScale(2).refreshBody()
+		platforms.create(400, 5000, ROAD).setScale(1).refreshBody()
 		platforms.create(700, 4800, GROUND_KEY)
 		platforms.create(40, 4610, GROUND_KEY)
 		platforms.create(60, 4450, GROUND_KEY)
@@ -224,8 +234,6 @@ export default class GameScene extends Phaser.Scene
 
 		// lek område
 		this.cat.angle -= 10
-		this.img.scaleX +=0.001
-		this.img.scaleY +=0.001
 
 		if (this.player.y >= 4500){
     	this.cameras.main.scrollY -= 1
