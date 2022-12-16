@@ -285,7 +285,7 @@ export default class GameScene extends Phaser.Scene
 	// spelaren function
     addPlayer(){
         
-        const player = this.physics.add.sprite(100, 100, RAT_IDEL_KEY)
+        const player = this.physics.add.sprite(100, 5000, RAT_IDEL_KEY)
 		player.setBounce(0)
 		player.setCollideWorldBounds(true)
 		
@@ -409,7 +409,7 @@ export default class GameScene extends Phaser.Scene
 		this.cat.angle -= 10
 		this.img.scaleX +=0.001
 		this.img.scaleY +=0.001
-    	//this.cameras.main.scrollY -= 1
+    	this.cameras.main.scrollY -= 1
 		//console.log(this.player.y);
 		//console.log(this.cameras.main.midPoint.y)
 	}
