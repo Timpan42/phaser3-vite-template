@@ -50,8 +50,10 @@ Behöver fixa ett sätt så kameran rör sig uppåt och om man ramla så blir de
 
 50. Fre
 ### Ska göra idag:
+Ska lägga till nya bakgrunder, text som ska vara storin, möjligtvis ändra plattformarna om jag kan hitta bra sprits. Ändra lite på kamerans hastighet och stjärnan ska vara en bomb för att passa storin. Väljer också att ta bort pistolen för har inte tid att fixa den och kommer inte att användas.     
 
 ### Har gjort:
+Har gjort första bakgrunden på marken och spelet har testas. Kamran har ändrats så längre upp man har nått så svårare blir det för att kameran gå upp snabbare. Måste föra in text för storin och fixa background mer. 
 
 51. Tis
 Presentera
