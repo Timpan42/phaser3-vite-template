@@ -23,9 +23,7 @@ export default class GameScene extends Phaser.Scene
 	// ladar in först t.ex sprits
 	preload()
 	{
-        this.load.image('sky', 'assets/legitjag.png')
-        this.load.image('sky1', 'assets/legitjag.png')
-        this.load.image('city', 'assets/war2_back.png')
+        this.load.image('city', 'assets/war2_back_v2.png')
         this.load.image(ROAD, 'assets/small_road.png')
 		this.load.image(GROUND_KEY, 'assets/platform.png')
 		this.load.image(BOMB, 'assets/star.png')
@@ -45,17 +43,11 @@ export default class GameScene extends Phaser.Scene
 	create()
 	{
 		// cameras physics
-        this.cameras.main.setBounds(0, 20, 800, 5000);
-        this.physics.world.setBounds(0, 0, 800, 5000);
+        this.cameras.main.setBounds(0, 20, 800, 5000)
+        this.physics.world.setBounds(0, 0, 800, 5000)
 
-		//spana backgrund
-        this.img = this.add.image(400, 300, 'sky')
-		this.graphics = this.add.graphics()
-		
-		this.graphics.fillGradientStyle(0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 1)
-
-		// skapa city 
-		this.img = this.add.image(400, 4750, 'city')
+		// skapa city (backgrund)
+		this.img = this.add.image(400, 2500, 'city')
 		
 		//spana mark
         const platforms = this.addPlatforms()
@@ -70,17 +62,8 @@ export default class GameScene extends Phaser.Scene
 		// skapar bomb 
 		this.bomb = this.addBomb()
 
-		// inportera inputs
-		this.cursors = this.input.keyboard.createCursorKeys()
-		this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
-		this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
-		this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
-		this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
-		
 		// kamra start position
 		this.cameras.main.centerOn(0,5000)
-
-		// game over text
 
 		//camera ska följa splerare 
 		this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
@@ -90,7 +73,16 @@ export default class GameScene extends Phaser.Scene
         this.physics.add.collider(this.cat, platforms)
         this.physics.add.collider(this.bomb, platforms)
 
+		// kollar om player overlapar med bomb
 		this.physics.add.overlap(this.player, this.bomb, this.collectBomb, null, this)
+
+		// inportera inputs
+		this.cursors = this.input.keyboard.createCursorKeys()
+		this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
+		this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
+		this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+		this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
+		
 
 
 	}
@@ -139,13 +131,13 @@ export default class GameScene extends Phaser.Scene
 
         return platforms
     }
-
+	// bombens/win object function
 	addBomb(){
 		const bomb = this.physics.add.sprite(50, 100, BOMB).refreshBody()
 
 		return bomb
 	}
-
+	// catens function
 	addCat(){ 
 		const cat = this.physics.add.sprite(100, 2300, CAT)		
 
@@ -182,18 +174,23 @@ export default class GameScene extends Phaser.Scene
         return player
     }
 
+	addText(){
+		this.add.text(300, this.cameras.main.midPoint.y, 'Game Over', { fontSize: '32px'})
+
+	}
+
 	update(){
 		// OM spelaren landar under kamran så är det gameOver 
 		if (this.player.y > this.cameras.main.midPoint.y + 300 ){
 			this.gameOver = true
 		} 
 
-		// det blir två game overs, vet inte varför 
+		// Game Over
 		if(this.gameOver){
 			this.add.text(300, this.cameras.main.midPoint.y, 'Game Over', { fontSize: '32px'})
 			return
 		}
-
+		// Game Win 
 		if(this.gameWin){
 			this.add.text(300, this.cameras.main.midPoint.y, 'Game Win', { fontSize: '32px'})
 			this.scene.pause()
@@ -235,9 +232,10 @@ export default class GameScene extends Phaser.Scene
 		// lek område
 		this.cat.angle -= 10
 
-		if (this.player.y >= 4500){
+		// kamra kontrolen 
+		if (this.player.y <= 4800 && this.player.y >= 4500){
     	this.cameras.main.scrollY -= 1
-		} else if(this.player.y <= 4500 && this.player.y >= 3500) {
+		} if(this.player.y <= 4500 && this.player.y >= 3500) {
 			this.cameras.main.scrollY -= 1.5
 		} else if(this.player.y <= 3500) {
 			this.cameras.main.scrollY -= 1.75

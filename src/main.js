@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 
-import GameScene from './scenes/GameScene'
-//import GameScene from './scenes/GameTest'
+//import GameScene from './scenes/GameScene'
+import GameScene from './scenes/GameTest'
 
 
 const config = {
