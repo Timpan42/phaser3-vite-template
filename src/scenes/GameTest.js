@@ -6,6 +6,7 @@ const RAT_WALK_KEY = 'rat1_walk'
 const CAT = 'Cat'
 const BOMB = 'bomb'
 const ROAD = 'road'
+const CLOUD = 'cloud'
 
 // spelet
 export default class GameScene extends Phaser.Scene
@@ -25,7 +26,8 @@ export default class GameScene extends Phaser.Scene
 	{
         this.load.image('city', 'assets/war2_back_v2.png')
         this.load.image(ROAD, 'assets/small_road.png')
-		this.load.image(GROUND_KEY, 'assets/platform.png')
+		this.load.image(GROUND_KEY, 'assets/road.png')
+		this.load.image(CLOUD, 'assets/clouds.png')
 		this.load.image(BOMB, 'assets/star.png')
 		this.load.spritesheet(CAT,'assets/Cat/Idle.png',{
 			frameWidth: 48, frameHeight:48})
@@ -66,7 +68,7 @@ export default class GameScene extends Phaser.Scene
 		this.cameras.main.centerOn(0,5000)
 
 		//camera ska följa splerare 
-		this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
+		//this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
 
 		//colider med mark
         this.physics.add.collider(this.player, platforms)
@@ -116,18 +118,18 @@ export default class GameScene extends Phaser.Scene
         platforms.create(430, 2050, GROUND_KEY).setScale(0.25,1).refreshBody()
         platforms.create(230, 1850, GROUND_KEY).setScale(0.25,1).refreshBody()
         platforms.create(430, 1650, GROUND_KEY).setScale(0.25,1).refreshBody()
-        platforms.create(130, 1630, GROUND_KEY).setScale(0.25,1).refreshBody()
-        platforms.create(30, 1430, GROUND_KEY).setScale(0.25,1).refreshBody()
-        platforms.create(530, 1260, GROUND_KEY).setScale(0.25,1).refreshBody()
-        platforms.create(700, 1060, GROUND_KEY).setScale(0.25,1).refreshBody()
-        platforms.create(80, 960, GROUND_KEY).setScale(0.25,1).refreshBody()
+        platforms.create(130, 1630, CLOUD).setScale(0.25,0.5).refreshBody()
+        platforms.create(30, 1430, CLOUD).setScale(0.25,0.5).refreshBody()
+        platforms.create(530, 1260, CLOUD).setScale(0.25,0.5).refreshBody()
+        platforms.create(700, 1060, CLOUD).setScale(0.25,0.5).refreshBody()
+        platforms.create(80, 960, CLOUD).setScale(0.25,0.5).refreshBody()
 
         platforms.create(150, 760, GROUND_KEY).setScale(0.03,1).refreshBody()
         platforms.create(550, 580, GROUND_KEY).setScale(0.03,1).refreshBody()
         platforms.create(250, 380, GROUND_KEY).setScale(0.02,1).refreshBody()
         platforms.create(650, 200, GROUND_KEY).setScale(0.01,1).refreshBody()
 
-        platforms.create(180, 150, GROUND_KEY)
+        platforms.create(180, 150, CLOUD)
 
         return platforms
     }
@@ -175,7 +177,8 @@ export default class GameScene extends Phaser.Scene
     }
 
 	addText(){
-		this.add.text(300, this.cameras.main.midPoint.y, 'Game Over', { fontSize: '32px'})
+		this.add.text(250, this.cameras.main.midPoint.y -50, 'Game Over', { fontSize: '64px'})
+		this.WinText.setColor('#000000')
 
 	}
 
@@ -187,12 +190,15 @@ export default class GameScene extends Phaser.Scene
 
 		// Game Over
 		if(this.gameOver){
-			this.add.text(300, this.cameras.main.midPoint.y, 'Game Over', { fontSize: '32px'})
+			this.WinText = this.add.text(250, this.cameras.main.midPoint.y - 50, 'Game Over', { fontSize: '64px'})
+			this.WinText.setColor('#000000')
+
 			return
 		}
 		// Game Win 
 		if(this.gameWin){
-			this.add.text(300, this.cameras.main.midPoint.y, 'Game Win', { fontSize: '32px'})
+			this.add.text(250, this.cameras.main.midPoint.y - 50, 'Game Win', { fontSize: '32px'})
+			this.WinText.setColor('#000000')
 			this.scene.pause()
 		}
 
