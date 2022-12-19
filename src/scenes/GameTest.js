@@ -3,7 +3,9 @@ import Phaser from 'phaser'
 const GROUND_KEY = 'ground'
 const RAT_IDEL_KEY = 'rat1_idel'
 const RAT_WALK_KEY = 'rat1_walk'
-const CAT = 'Cat'
+const BIG_RAT = 'big_rat'
+const CAT = 'cat'
+const DOG = 'dog'
 const BOMB = 'bomb'
 const ROAD = 'road'
 const CLOUD = 'cloud'
@@ -29,8 +31,16 @@ export default class GameScene extends Phaser.Scene
 		this.load.image(GROUND_KEY, 'assets/road.png')
 		this.load.image(CLOUD, 'assets/clouds.png')
 		this.load.image(BOMB, 'assets/star.png')
+
 		this.load.spritesheet(CAT,'assets/Cat/Idle.png',{
 			frameWidth: 48, frameHeight:48})
+
+		this.load.spritesheet(DOG,'assets/Dog/Idle.png',{
+			frameWidth: 48, frameHeight:48})
+
+		this.load.spritesheet(BIG_RAT, 
+			'assets/bigRat/Idle.png',
+			{ frameWidth: 32, frameHeight: 32 })
 
 		this.load.spritesheet(RAT_IDEL_KEY, 
 			'assets/rat/idle.png',
@@ -61,8 +71,18 @@ export default class GameScene extends Phaser.Scene
 		this.cat = this.addCat()
 		this.cat.setScale(1.7)
 
+		this.dog = this.addDog()
+		this.dog.setScale(1.7)
+
+		this.rat = this.addRat()
+		this.rat.setScale(5.5)
+
 		// skapar bomb 
 		this.bomb = this.addBomb()
+
+		// skapar text
+		this.ratText = this.addRatText()
+
 
 		// kamra start position
 		this.cameras.main.centerOn(0,5000)
@@ -73,6 +93,8 @@ export default class GameScene extends Phaser.Scene
 		//colider med mark
         this.physics.add.collider(this.player, platforms)
         this.physics.add.collider(this.cat, platforms)
+        this.physics.add.collider(this.dog, platforms)
+        this.physics.add.collider(this.rat, platforms)
         this.physics.add.collider(this.bomb, platforms)
 
 		// kollar om player overlapar med bomb
@@ -84,9 +106,6 @@ export default class GameScene extends Phaser.Scene
 		this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
 		this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
 		this.keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
-		
-
-
 	}
 	// blockar upp win
 	collectBomb(player, bomb){
@@ -133,6 +152,99 @@ export default class GameScene extends Phaser.Scene
 
         return platforms
     }
+	addRatText(){
+		this.add.text(50, 4700, 'Give me', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+		
+		this.add.text(50, 4750, 'I want', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(550, 4450, 'The big', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+		
+		this.add.text(550, 4500, 'Boom will', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(550, 4550, 'Make town', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(550, 4600, 'Less grey', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+		
+		this.add.text(550, 4000, 'Great light', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(550, 4050, 'Will shine', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+		
+		this.add.text(550, 4100, 'Town happy?', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(300, 3550, 'I work', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+		
+		this.add.text(300, 2200, 'Town not', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(300, 2250, 'Happy', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(300, 2300, 'I Force', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(300, 2350, 'Happiness', {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(250, 950, "Don't like dogs", {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(250, 1000, "they dum", {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(380, 110, "Small rat", {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+
+		this.add.text(380, 160, "Says yes", {
+			fontSize: '32px', fontStyle: 'normal',
+			strokeThickness: 5, stroke:'#000000'
+		})
+		return this.addRatText
+	}
+
 	// bombens/win object function
 	addBomb(){
 		const bomb = this.physics.add.sprite(50, 100, BOMB).refreshBody()
@@ -141,9 +253,88 @@ export default class GameScene extends Phaser.Scene
 	}
 	// catens function
 	addCat(){ 
-		const cat = this.physics.add.sprite(100, 2300, CAT)		
+		const cat = this.physics.add.sprite(50, 2300, CAT)
+
+		this.anims.create({
+			key: 'cat-anims',
+			frames: this.anims.generateFrameNumbers(CAT, { start: 0, end: 3 }),
+			frameRate: 5,
+			repeat: -1
+		})
+
+		this.add.text(20, 2640, 'Stop it rat you', {
+			fontSize: '26px', fontStyle: 'normal',
+			strokeThickness: 4, stroke:'#000000'
+		})
+
+		this.add.text(20, 2680, 'are going to fail', {
+			fontSize: '26px', fontStyle: 'normal',
+			strokeThickness: 4, stroke:'#000000'
+		})
+
+		this.add.text(20, 2720, 'and then your', {
+			fontSize: '26px', fontStyle: 'normal',
+			strokeThickness: 4, stroke:'#000000'
+		})
+
+		this.add.text(20, 2760, 'body is mine', {
+			fontSize: '26px', fontStyle: 'normal',
+			strokeThickness: 4, stroke:'#000000'
+		})
 
 		return cat
+	}
+	
+	// hundens function
+	addDog(){
+		const dog = this.physics.add.sprite(50, 2000, DOG)
+
+		this.anims.create({
+			key: 'dog-anims',
+			frames: this.anims.generateFrameNumbers(DOG, { start: 0, end: 3 }),
+			frameRate: 5,
+			repeat: -1
+		})
+
+		this.add.text(20, 1980, 'Ay you, Rat', {
+			fontSize: '26px', fontStyle: 'normal',
+			strokeThickness: 4, stroke:'#000000'
+		})
+
+		
+		this.add.text(20, 2020, "You suck can't even", {
+			fontSize: '26px', fontStyle: 'normal',
+			strokeThickness: 4, stroke:'#000000'
+		})
+
+		this.add.text(20, 2060, "jump to a", {
+			fontSize: '26px', fontStyle: 'normal',
+			strokeThickness: 4, stroke:'#000000'
+		})
+
+		this.add.text(20, 2100, "simple platform", {
+			fontSize: '26px', fontStyle: 'normal',
+			strokeThickness: 4, stroke:'#000000'
+		})
+
+		return dog
+	}
+
+	addRat(){
+		const rat = this.physics.add.sprite(200, 20, BIG_RAT)
+
+		this.anims.create({
+			key: 'rat-anims',
+			frames: this.anims.generateFrameNumbers(BIG_RAT, { start: 0, end: 3 }),
+			frameRate: 5,
+			repeat: -1
+		})
+
+		this.add.text(20, 20, 'BIG RAT SAYS NO,	SMALL RAT YOU NEED TO STOP', {
+			fontSize: '26px', fontStyle: 'normal',
+			strokeThickness: 4, stroke:'#000000'
+		})
+		return rat
 	}
 	// spelaren function
     addPlayer(){
@@ -176,12 +367,6 @@ export default class GameScene extends Phaser.Scene
         return player
     }
 
-	addText(){
-		this.add.text(250, this.cameras.main.midPoint.y -50, 'Game Over', { fontSize: '64px'})
-		this.WinText.setColor('#000000')
-
-	}
-
 	update(){
 		// OM spelaren landar under kamran så är det gameOver 
 		if (this.player.y > this.cameras.main.midPoint.y + 300 ){
@@ -190,17 +375,28 @@ export default class GameScene extends Phaser.Scene
 
 		// Game Over
 		if(this.gameOver){
-			this.WinText = this.add.text(250, this.cameras.main.midPoint.y - 50, 'Game Over', { fontSize: '64px'})
-			this.WinText.setColor('#000000')
+			this.winText = this.add.text(250, this.cameras.main.midPoint.y - 50, 'Game Over', { fontSize: '64px'})
+			this.winText.setColor('#000000')
 
 			return
 		}
 		// Game Win 
 		if(this.gameWin){
-			this.add.text(250, this.cameras.main.midPoint.y - 50, 'Game Win', { fontSize: '32px'})
-			this.WinText.setColor('#000000')
+			this.overText = this.add.text(250, this.cameras.main.midPoint.y - 50, 'Game Win', { fontSize: '64px'})
+			this.overText.setColor('#000000')
 			this.scene.pause()
 		}
+
+		//NPC animation
+		if (this.cat.y >= 0){
+			this.cat.anims.play('cat-anims', true)
+		} 
+		if (this.dog.y >= 0){
+			this.dog.anims.play('dog-anims', true)
+		}
+		if (this.rat.y >= 0){
+			this.rat.anims.play('rat-anims', true)
+		} 
 
 		//input keys A 
 		if (this.keyA.isDown 
@@ -236,7 +432,7 @@ export default class GameScene extends Phaser.Scene
 		}
 
 		// lek område
-		this.cat.angle -= 10
+		this.cat.angle -= 0.5
 
 		// kamra kontrolen 
 		if (this.player.y <= 4800 && this.player.y >= 4500){
