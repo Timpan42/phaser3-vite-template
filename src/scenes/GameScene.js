@@ -89,7 +89,7 @@ export default class GameScene extends Phaser.Scene
 		this.cameras.main.centerOn(0,5000)
 
 		//camera ska följa splerare 
-		this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
+		//this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
 
 		//colider med mark
         this.physics.add.collider(this.player, platforms)
