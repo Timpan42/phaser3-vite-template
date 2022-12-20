@@ -30,7 +30,7 @@ export default class GameScene extends Phaser.Scene
         this.load.image(ROAD, 'assets/small_road.png')
 		this.load.image(GROUND_KEY, 'assets/road.png')
 		this.load.image(CLOUD, 'assets/clouds.png')
-		this.load.image(BOMB, 'assets/star.png')
+		this.load.image(BOMB, 'assets/bomb.png')
 
 		this.load.spritesheet(CAT,'assets/Cat/Idle.png',{
 			frameWidth: 48, frameHeight:48})
@@ -79,6 +79,7 @@ export default class GameScene extends Phaser.Scene
 
 		// skapar bomb 
 		this.bomb = this.addBomb()
+		this.bomb.setScale(4)
 
 		// skapar text
 		this.ratText = this.addRatText()
@@ -88,7 +89,7 @@ export default class GameScene extends Phaser.Scene
 		this.cameras.main.centerOn(0,5000)
 
 		//camera ska följa splerare 
-		//this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
+		this.cameras.main.startFollow(this.player, true, 0.05, 0.05);		
 
 		//colider med mark
         this.physics.add.collider(this.player, platforms)
@@ -247,7 +248,7 @@ export default class GameScene extends Phaser.Scene
 
 	// bombens/win object function
 	addBomb(){
-		const bomb = this.physics.add.sprite(50, 100, BOMB).refreshBody()
+		const bomb = this.physics.add.sprite(50, 50, BOMB).refreshBody()
 
 		return bomb
 	}
