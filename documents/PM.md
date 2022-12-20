@@ -5,7 +5,7 @@ Skapad av
 Tim Fagerdal
 
 Spel länk
-https://delightful-elf-e17bf0.netlify.app/
+https://rat-bastard.netlify.app/
 
 ## Inledning
 Detta PM kommer att ta upp den upplevelsen jag hade med att jobba med detta projekt att göra ett spel till webben. Jag använde mig av spelmotorn Phaser 3 för skapa detta spel vid namn “The Rat Bastard”.  
